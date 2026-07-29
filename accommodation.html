@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SRHU Disability Accommodation Helper</title>
+<style>
+  :root { --red: #b3282d; --dark: #222; --light: #faf7f2; --accent: #1a5c8a; }
+  * { box-sizing: border-box; }
+  body { font-family: Georgia, 'Times New Roman', serif; background: var(--light); color: var(--dark); margin: 0; font-size: 18px; line-height: 1.55; }
+  header { background: var(--red); color: #fff; padding: 20px 16px; text-align: center; }
+  header h1 { margin: 0 0 6px; font-size: 1.5em; }
+  header p { margin: 0; font-size: 0.95em; opacity: 0.95; }
+  main { max-width: 760px; margin: 0 auto; padding: 16px; }
+  .step { background: #fff; border: 2px solid #ddd; border-radius: 10px; padding: 18px; margin: 18px 0; }
+  .step h2 { margin-top: 0; color: var(--red); font-size: 1.2em; }
+  .hint { font-size: 0.9em; color: #555; margin: 6px 0 10px; }
+  label { display: block; margin: 12px 0 4px; font-weight: bold; }
+  input[type=text], input[type=tel], input[type=email], textarea, select {
+    width: 100%; padding: 12px; font-size: 1em; border: 2px solid #bbb; border-radius: 8px; font-family: inherit;
+  }
+  textarea { min-height: 90px; }
+  .choice { display: flex; align-items: flex-start; gap: 10px; margin: 10px 0; padding: 12px; border: 2px solid #ccc; border-radius: 8px; cursor: pointer; background: #fff; }
+  .choice:hover { border-color: var(--accent); }
+  .choice input { width: 22px; height: 22px; margin-top: 3px; flex-shrink: 0; }
+  .choice b { display: block; }
+  .choice small { color: #555; }
+  .locked { background: #f3ece2; border-color: var(--red); }
+  button.big { display: block; width: 100%; padding: 16px; font-size: 1.15em; font-weight: bold; color: #fff; background: var(--red); border: none; border-radius: 10px; cursor: pointer; margin: 20px 0; font-family: inherit; }
+  button.big:hover { background: #8f1f23; }
+  button.secondary { background: var(--accent); }
+  #letterArea { display: none; }
+  #letter { background: #fff; border: 2px solid #ddd; border-radius: 10px; padding: 34px; font-family: 'Times New Roman', Times, serif; font-size: 12pt; }
+  #letter p { margin: 0 0 12pt; }
+  #letter ol { margin: 0 0 12pt; padding-left: 28px; }
+  #letter li { margin-bottom: 8pt; }
+  .center { text-align: center; }
+  .pagebreak { border-top: 3px dashed #bbb; margin: 28px 0; }
+  .sigline { margin-top: 42px; border-bottom: 1px solid #000; width: 260px; }
+  .sigcap { font-style: italic; font-size: 11pt; margin-bottom: 18pt; }
+  .notice { background: #fff8e1; border: 2px solid #e6c200; border-radius: 8px; padding: 12px; font-size: 0.92em; margin: 14px 0; }
+  footer { text-align: center; font-size: 0.85em; color: #666; padding: 24px 16px; }
+  @media print {
+    header, footer, .step, button, .notice, .noprint { display: none !important; }
+    body { background: #fff; font-size: 12pt; }
+    main { max-width: none; padding: 0; }
+    #letterArea { display: block !important; }
+    #letter { border: none; padding: 0; }
+    .pagebreak { border: none; page-break-before: always; margin: 0; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Disability Accommodation Helper</h1>
+  <p>Santa Rosa Homeless Union &mdash; help a fellow member ask for the accommodations the law gives them</p>
+</header>
+<main>
+
+<div class="notice"><b>How this works:</b> answer the questions below in plain words, press the red button, and this page writes a formal accommodation request letter and a permission slip (release). Print it, save it as a PDF, or email it. Nothing you type is sent anywhere &mdash; it stays on this device. This is a self-advocacy tool, not legal advice.</div>
+
+<div class="step">
+  <h2>1. Who needs the accommodation?</h2>
+  <label for="name">Their full name</label>
+  <input type="text" id="name" placeholder="e.g., Maria Lopez">
+  <label for="dob">Date of birth (optional)</label>
+  <input type="text" id="dob" placeholder="e.g., 3/18/1980">
+</div>
+
+<div class="step">
+  <h2>2. What is their situation at Sam Jones Hall right now?</h2>
+  <label class="choice"><input type="radio" name="status" value="in" checked><span><b>They are staying there now</b><small>They have a bed and want protection before anything goes wrong.</small></span></label>
+  <label class="choice"><input type="radio" name="status" value="out"><span><b>They were kicked out</b><small>They were exited and want back in while they appeal.</small></span></label>
+  <label class="choice"><input type="radio" name="status" value="waiting"><span><b>They are trying to get in</b><small>They are outside waiting for a bed.</small></span></label>
+</div>
+
+<div class="step">
+  <h2>3. Describe the disability in their own words</h2>
+  <p class="hint">Plain words are fine: "I had a stroke," "I have ADHD and forget rules," "I'm having surgery and will be on crutches," "I hear voices when stressed." Do NOT attach medical records &mdash; they are never required at this stage.</p>
+  <textarea id="disability" placeholder="What is the disability and how does it affect them day to day?"></textarea>
+</div>
+
+<div class="step">
+  <h2>4. What happened, or what is about to happen? (optional)</h2>
+  <p class="hint">If they got a violation, were kicked out, or something is coming up (like a surgery), say what happened in a few sentences. Stick to facts they know are true.</p>
+  <textarea id="incident" placeholder="e.g., I missed bed check because I was sick and throwing up. I was exited two days later with no warning."></textarea>
+</div>
+
+<div class="step">
+  <h2>5. What accommodations do they need?</h2>
+  <p class="hint">Check everything that applies. The first two are part of every Union request.</p>
+  <label class="choice locked"><input type="checkbox" id="accRep" checked onclick="this.checked=true"><span><b>Union representation (always included)</b><small>The Santa Rosa Homeless Union speaks with the shelter alongside them, and gets copies of notices, so communication actually works.</small></span></label>
+  <label class="choice locked"><input type="checkbox" id="accCure" checked onclick="this.checked=true"><span><b>Warning + chance to fix it first (always included)</b><small>Before any violation or exit: written notice to them AND the Union, a chance to cure, and a meeting &mdash; and they stay housed while any appeal is pending.</small></span></label>
+  <label class="choice"><input type="checkbox" id="accReentry"><span><b>Let them back in now</b><small>Re-entry to the shelter while their appeal is heard. (Check this if they were kicked out.)</small></span></label>
+  <label class="choice"><input type="checkbox" id="accESA"><span><b>Emotional support animal</b><small>Keep their animal with them as a disability accommodation.</small></span></label>
+  <label class="choice"><input type="checkbox" id="accCurfew"><span><b>Flexibility on curfew / bed check / timing rules</b><small>When the disability causes lateness or a missed check, it is not treated as a violation.</small></span></label>
+  <label class="choice"><input type="checkbox" id="accRest"><span><b>Rest and medical recovery</b><small>Permission to rest at the facility during the day, and adjustments for limited mobility (crutches, wheelchair, walker, recovery from surgery).</small></span></label>
+  <label class="choice"><input type="checkbox" id="accPaper"><span><b>Help with paperwork and benefits</b><small>Help understanding forms, deadlines, benefits or payee programs &mdash; with the Union able to assist.</small></span></label>
+  <label class="choice"><input type="checkbox" id="accOtherBox"><span><b>Something else</b><small>Describe it below in plain words.</small></span></label>
+  <textarea id="accOther" placeholder="Describe any other accommodation needed"></textarea>
+</div>
+
+<div class="step">
+  <h2>6. Who is helping them? (the Union representative)</h2>
+  <label for="repName">Helper / representative name</label>
+  <input type="text" id="repName" placeholder="Your name">
+  <label for="repPhone">Helper phone</label>
+  <input type="tel" id="repPhone" placeholder="(707) 555-0000">
+  <label for="repEmail">Helper email</label>
+  <input type="email" id="repEmail" placeholder="you@example.com">
+</div>
+
+<button class="big" onclick="makeLetter()">Write the letter</button>
+
+<div id="letterArea">
+  <div class="notice noprint"><b>Read it out loud together.</b> Fix anything that isn't right (you can edit the text after printing, or change your answers above and press the button again). Then have the member sign the last page &mdash; pen, or a finger/typed signature on a PDF both count. Email it to the shelter director and keep a copy.</div>
+  <button class="big secondary noprint" onclick="window.print()">Print / Save as PDF</button>
+  <div id="letter"></div>
+  <button class="big secondary noprint" onclick="copyLetter()">Copy letter text (to paste into an email)</button>
+</div>
+
+</main>
+<footer>Santa Rosa Homeless Union &mdash; members helping members. This tool is for advocacy and is not legal advice.</footer>
+
+<script>
+function esc(s) {
+  return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function makeLetter() {
+  var name = esc(document.getElementById('name').value.trim()) || '[NAME]';
+  var dob = esc(document.getElementById('dob').value.trim());
+  var status = document.querySelector('input[name=status]:checked').value;
+  var dis = esc(document.getElementById('disability').value.trim());
+  var incident = esc(document.getElementById('incident').value.trim());
+  var repName = esc(document.getElementById('repName').value.trim()) || '[HELPER NAME]';
+  var repPhone = esc(document.getElementById('repPhone').value.trim()) || '[PHONE]';
+  var repEmail = esc(document.getElementById('repEmail').value.trim()) || '[EMAIL]';
+  var today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  var statusLine = {
+    'in': name + ' is currently a resident of Sam Jones Hall.',
+    'out': name + ' was recently exited from Sam Jones Hall and seeks to return.',
+    'waiting': name + ' is currently unsheltered and is seeking entry to Sam Jones Hall.'
+  }[status];
+
+  var items = [];
+  items.push('<li><b>Union representation and effective communication.</b> ' + name + ' has designated the Santa Rosa Homeless Union (SRHU) as their companion and representative for the interactive process. We ask that the program communicate with the SRHU representative named below as well as with ' + name + ' about rules, rule changes, alleged violations, and program decisions, as required by 28 C.F.R. § 35.160 and § 36.303(c). Because of the disability described above, communications made only to ' + name + ' are not effective; notice to SRHU is the accommodation that makes them effective.</li>');
+  items.push('<li><b>Written notice and an opportunity to cure before any violation or exit.</b> Before ' + name + ' is cited with any rule violation or removed from the program, we ask that staff first approach ' + name + ', give prompt written notice of the concern to ' + name + ' and to SRHU, provide an opportunity to cure and correct it, and meet with ' + name + ' and SRHU to find the least restrictive resolution — including whether the conduct is related to the disability and whether an accommodation would prevent it. If a violation is nonetheless found, ' + name + ' asks to remain in the program until they have had a full opportunity to appeal through the grievance process.</li>');
+  if (document.getElementById('accReentry').checked || status === 'out') {
+    items.push('<li><b>Immediate re-entry pending appeal.</b> ' + name + ' asks to re-enter Sam Jones Hall immediately while their appeal is heard, and that the appeal be heard promptly, in person or by video, with the assistance of an SRHU representative.</li>');
+  }
+  if (document.getElementById('accESA').checked) {
+    items.push('<li><b>Emotional support animal.</b> ' + name + ' asks to keep their emotional support animal with them as a reasonable accommodation under the Fair Housing Act, the ADA, and Section 504, and that any concern about the animal be raised with ' + name + ' and their SRHU representative before any adverse action is taken.</li>');
+  }
+  if (document.getElementById('accCurfew').checked) {
+    items.push('<li><b>Flexibility on curfew, bed check, and timing rules.</b> Where ' + name + ' is late or misses a requirement for a disability-related reason, we ask that staff attempt to reach ' + name + ' and their SRHU representative before treating it as a violation, rather than applying these rules automatically.</li>');
+  }
+  if (document.getElementById('accRest').checked) {
+    items.push('<li><b>Rest and mobility accommodations.</b> We ask for reasonable flexibility in any rules or schedules that interfere with medically needed rest — including permission to rest at the facility during the day — and reasonable adjustments for limited mobility.</li>');
+  }
+  if (document.getElementById('accPaper').checked) {
+    items.push('<li><b>Assistance with paperwork, deadlines, and benefits.</b> Because the disability makes it difficult to manage forms, deadlines, and benefit programs alone, we ask that the program provide assistance and allow SRHU to assist — including with any benefits or representative-payee arrangements the program was involved in setting up.</li>');
+  }
+  var other = esc(document.getElementById('accOther').value.trim());
+  if (document.getElementById('accOtherBox').checked && other) {
+    items.push('<li><b>Additional accommodation.</b> ' + other + '</li>');
+  }
+
+  var h = '';
+  h += '<p>' + today + '</p>';
+  h += '<p><b>To:</b><br>Program Director, Sam Jones Hall<br>Catholic Charities of Northwest California<br>987 Airway Court, Santa Rosa, CA 95403</p>';
+  h += '<p><b>Re: Disability Accommodation Request — ' + name + (dob ? ' (DOB ' + dob + ')' : '') + '</b></p>';
+  h += '<p>To the Program Director:</p>';
+  h += '<p>I am writing on behalf of the Santa Rosa Homeless Union (SRHU), at the direction of ' + name + ', to request disability accommodations. ' + statusLine + ' ' + name + ' has designated SRHU as their companion and representative for purposes of the interactive process, and a signed authorization for release of information accompanies this letter as its final page.</p>';
+  if (dis) {
+    h += '<p><b>The disability.</b> In ' + name + '’s own words: “' + dis + '” This condition substantially limits one or more major life activities and is a disability under the Americans with Disabilities Act, Section 504 of the Rehabilitation Act, the Fair Housing Act, and California law.</p>';
+  } else {
+    h += '<p><b>The disability.</b> ' + name + ' has a disability that substantially limits one or more major life activities. Further detail will be provided through the interactive process.</p>';
+  }
+  if (incident) {
+    h += '<p><b>What happened.</b> ' + incident + ' The conduct described is a manifestation of the disability and of the failure to accommodate it — not a willful violation of program rules.</p>';
+  }
+  h += '<p><b>Accommodations requested:</b></p><ol>' + items.join('') + '</ol>';
+  h += '<p>These requests are made under the Americans with Disabilities Act, Section 504 of the Rehabilitation Act, the Fair Housing Act, and California law, including Government Code section 11135, the Fair Employment and Housing Act, and the Unruh Civil Rights Act, all of which require a publicly funded shelter to reasonably modify its rules, policies, and practices to accommodate a person’s disability.</p>';
+  h += '<p>If you find these requests state a prima facie case for reasonable accommodation, ' + name + ' can provide a letter from a doctor, clinician, or case manager confirming that they have a disability and need these accommodations. That is the only verification you may require — not diagnoses or medical records. The signed authorization attached to this letter permits you to communicate with SRHU; in any event, the interactive process requires no disclosure from you — only a fact-specific determination of whether the requested accommodations are reasonable.</p>';
+  h += '<p>Please confirm receipt of this letter and contact the SRHU representative below as soon as possible to begin the interactive process. Please also provide the appeal and grievance procedures for the program.</p>';
+  h += '<p>Thank you,</p>';
+  h += '<p>' + repName + '<br>Santa Rosa Homeless Union<br>' + repPhone + ' · ' + repEmail + '</p>';
+
+  h += '<div class="pagebreak"></div>';
+  h += '<p class="center"><b>AUTHORIZATION FOR RELEASE AND EXCHANGE OF INFORMATION</b><br><i>(HIPAA-Compliant Authorization — 45 C.F.R. § 164.508)</i></p>';
+  h += '<p>I, <b>' + name + '</b>' + (dob ? ', date of birth <b>' + dob + '</b>' : ', date of birth ____________') + ', hereby authorize the following:</p>';
+  h += '<ol>';
+  h += '<li><b>Parties authorized to disclose and exchange information:</b> Catholic Charities of Northwest California, including staff of Sam Jones Hall.</li>';
+  h += '<li><b>Person authorized to receive information and communicate on my behalf:</b> ' + repName + ' and other designated representatives of the Santa Rosa Homeless Union, ' + repPhone + ', ' + repEmail + '.</li>';
+  h += '<li><b>Information covered:</b> Information concerning my enrollment and participation in Sam Jones Hall; my disability accommodation requests; any alleged rule violations, exits, appeals, or grievances; and related communications, records, and program decisions. This authorization permits the parties above to speak and correspond with my representative regarding these matters.</li>';
+  h += '<li><b>Purpose:</b> To allow the Santa Rosa Homeless Union to represent and assist me in the interactive process, my accommodation requests, any appeals or grievances, and related advocacy, at my request.</li>';
+  h += '<li><b>Expiration:</b> One (1) year from the date of my signature below, or upon my written revocation, whichever occurs first.</li>';
+  h += '</ol>';
+  h += '<p><b>My rights.</b> I understand that I may revoke this authorization at any time by providing written notice to any of the parties named above, except to the extent that action has already been taken in reliance on it. I understand that signing is voluntary, and that my shelter, services, or benefits may not be conditioned on whether I sign. I understand that information disclosed under this authorization may be subject to redisclosure by the recipient and may no longer be protected by federal privacy law (HIPAA). I understand I am entitled to a copy of this authorization.</p>';
+  h += '<p><b>Execution.</b> This authorization may be signed by hand or electronically, including by a typed or drawn signature on a PDF copy. A signed photograph, scan, or electronic copy shall be as valid as the original.</p>';
+  h += '<div class="sigline">&nbsp;</div><p class="sigcap">Signature of ' + name + '</p>';
+  h += '<div class="sigline">&nbsp;</div><p class="sigcap">Date</p>';
+  h += '<div class="sigline">&nbsp;</div><p class="sigcap">Witness (optional)</p>';
+
+  document.getElementById('letter').innerHTML = h;
+  document.getElementById('letterArea').style.display = 'block';
+  document.getElementById('letterArea').scrollIntoView({ behavior: 'smooth' });
+}
+
+function copyLetter() {
+  var txt = document.getElementById('letter').innerText;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(function () { alert('Letter copied. Paste it into an email.'); },
+      function () { fallbackCopy(txt); });
+  } else { fallbackCopy(txt); }
+}
+function fallbackCopy(txt) {
+  var ta = document.createElement('textarea');
+  ta.value = txt; document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); alert('Letter copied. Paste it into an email.'); }
+  catch (e) { alert('Could not copy automatically — select the letter text and copy it by hand.'); }
+  document.body.removeChild(ta);
+}
+</script>
+</body>
+</html>
